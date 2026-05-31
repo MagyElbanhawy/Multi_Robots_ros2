@@ -1,0 +1,25 @@
+name: python-syntax
+on:
+  pull_request:
+  push:
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Compile Python files
+        run: python -m compileall src/emrmf_core/emrmf_core src/emrmf_core/launch scripts
+      - name: Run unit tests
+        run: PYTHONPATH=src/emrmf_core pytest -q src/emrmf_core/test
+      - name: Generate robustness comparison
+        run: PYTHONPATH=src/emrmf_core python scripts/generate_robustness_comparison.py --runs 3 --samples-per-run 50 --markdown-out /tmp/robustness.md --csv-out /tmp/robustness.csv
+      - name: Generate ablation summary
+        run: PYTHONPATH=src/emrmf_core python scripts/generate_ablation_summary.py --runs 3 --samples-per-run 50 --markdown-out /tmp/ablation.md --csv-out /tmp/ablation.csv
+      - name: Generate scalability summary
+        run: PYTHONPATH=src/emrmf_core python scripts/generate_scalability_summary.py --trials 3 --samples-per-robot 50 --markdown-out /tmp/scalability.md --csv-out /tmp/scalability_robot_count_summary.csv
