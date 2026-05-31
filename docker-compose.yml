@@ -1,0 +1,8 @@
+services:
+  emrmf:
+    build: .
+    network_mode: host
+    environment:
+      - ROS_DOMAIN_ID=42
+      - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+    command: bash -lc "source /opt/ros/humble/setup.bash && source install/setup.bash && ros2 launch emrmf_core emrmf_sim.launch.py delay_s:=0.5 packet_loss:=0.1 gamma:=0.35"
