@@ -12,6 +12,8 @@ setup(
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/config', glob('config/*.yaml')),
         ('share/' + package_name + '/launch', glob('launch/*.launch.py')),
+        ('share/' + package_name + '/worlds', glob('worlds/*.world')),
+        ('share/' + package_name + '/urdf', glob('urdf/*.xacro')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -29,6 +31,9 @@ setup(
             'global_fusion_node = emrmf_core.global_fusion_node:main',
             'adversarial_monitor_node = emrmf_core.adversarial_monitor_node:main',
             'experiment_runner_node = emrmf_core.experiment_runner_node:main',
+            'gazebo_trajectory_node = emrmf_core.gazebo_trajectory_node:main',
+            'gazebo_emrmf_bridge_node = emrmf_core.gazebo_emrmf_bridge_node:main',
+            'scalability_experiment_logger_node = emrmf_core.scalability_experiment_logger_node:main',
         ],
     },
 )

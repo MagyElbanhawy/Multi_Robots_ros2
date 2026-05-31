@@ -19,3 +19,7 @@ jobs:
         run: PYTHONPATH=src/emrmf_core pytest -q src/emrmf_core/test
       - name: Generate robustness comparison
         run: PYTHONPATH=src/emrmf_core python scripts/generate_robustness_comparison.py --runs 3 --samples-per-run 50 --markdown-out /tmp/robustness.md --csv-out /tmp/robustness.csv
+      - name: Generate ablation summary
+        run: PYTHONPATH=src/emrmf_core python scripts/generate_ablation_summary.py --runs 3 --samples-per-run 50 --markdown-out /tmp/ablation.md --csv-out /tmp/ablation.csv
+      - name: Generate scalability summary
+        run: PYTHONPATH=src/emrmf_core python scripts/generate_scalability_summary.py --trials 3 --samples-per-robot 50 --markdown-out /tmp/scalability.md --csv-out /tmp/scalability_robot_count_summary.csv

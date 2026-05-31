@@ -87,3 +87,40 @@ PYTHONPATH=src/emrmf_core python3 scripts/generate_robustness_comparison.py \
 ```
 
 The generated table reports RMSE, 95% confidence intervals, improvement over an unweighted baseline, mean accepted trust, and rank for each exponent/stressor setting. Use `docs/robustness_comparison.md` and `docs/robustness_comparison.csv` as the manuscript-ready source for the cubic-exponent justification.
+
+## Generate final ablation summary
+
+```bash
+PYTHONPATH=src/emrmf_core python3 scripts/generate_ablation_summary.py \
+  --runs 5 \
+  --samples-per-run 200 \
+  --markdown-out docs/final_ablation_summary.md \
+  --csv-out docs/final_ablation_summary.csv
+```
+
+The ablation summary isolates `baseline_graph_slam`, `decentralized_only`, `trust_only`, and `full_emrmf`, reporting mean RMSE, standard deviation, 95% confidence interval, fusion time, and improvement over the baseline.
+
+## Gazebo ROS 2 Humble scalability simulation
+
+The Gazebo launch starts the shared indoor world, spawns a configurable team of mobile robots, and connects the robot-local EMRMF observation bridge to the LoRa, trust, global fusion, and experiment logger nodes.
+
+```bash
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install
+source install/setup.bash
+ros2 launch emrmf_core emrmf_gazebo_scalability.launch.py robot_count:=5 sensor_noise_std:=0.04 enable_depth_camera:=true trials:=5
+```
+
+The launch supports `robot_count:=2`, `3`, `4`, or `5`. Each robot is spawned into the same indoor Gazebo map with a differential-drive base, odometry/TF, a 2D LiDAR scan topic, and an optional depth camera. The `gazebo_trajectory_node` publishes deterministic `cmd_vel` commands so every robot follows a predefined indoor trajectory, while `sensor_noise_std` controls the odometry, LiDAR, and depth-camera Gaussian noise. The `gazebo_emrmf_bridge_node` converts each robot's Gazebo odometry, scan, and depth availability into `/local_slam/observations`, which feeds the existing LoRa, trust-factor, global-fusion, and experiment logger pipeline.
+
+To regenerate the scalability table without starting Gazebo, run:
+
+```bash
+PYTHONPATH=src/emrmf_core python3 scripts/generate_scalability_summary.py \
+  --trials 5 \
+  --samples-per-robot 120 \
+  --csv-out docs/scalability_robot_count_summary.csv \
+  --markdown-out docs/scalability_robot_count_summary.md
+```
+
+The generated `docs/scalability_robot_count_summary.csv` contains `robot_count`, `mean_pose_rmse`, `std`, `ci95`, `alignment_rmse`, `fusion_time_ms`, `mean_theta`, `accepted_constraints`, and `success_rate` for robot counts 2, 3, 4, and 5.

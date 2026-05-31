@@ -57,3 +57,4 @@ experiment_runner_node:
     packet_loss_rates: [0.0, 0.1, 0.3]
     delay_levels_s: [0.5, 2.0, 5.0]
     noise_levels_std: [0.03, 0.08, 0.16]
+    robot_counts: [2, 3, 4, 5]
