@@ -1,4 +1,4 @@
-"""Offline ablation and sensitivity runner for reviewer-facing EMRMF evidence."""
+﻿"""Offline ablation and sensitivity runner for reviewer-facing EMRMF evidence."""
 
 from __future__ import annotations
 
@@ -11,7 +11,6 @@ from emrmf_core.qos import telemetry_qos
 from emrmf_core.ablation import generate_ablation_summary
 from emrmf_core.robustness import generate_robustness_comparison
 from emrmf_core.scalability import generate_scalability_summary
-from emrmf_core.robustness import generate_robustness_comparison
 
 
 class ExperimentRunnerNode(Node):
@@ -36,7 +35,6 @@ class ExperimentRunnerNode(Node):
             return
         self.completed = True
         robustness = generate_robustness_comparison(
-        result = generate_robustness_comparison(
             runs=int(self.get_parameter('runs').value),
             samples_per_run=int(self.get_parameter('samples_per_run').value),
             gamma=float(self.get_parameter('gamma').value),
@@ -67,7 +65,6 @@ class ExperimentRunnerNode(Node):
             'final_ablation_summary': ablation,
             'scalability_robot_count_summary': scalability,
         }
-        result['stamp'] = now_seconds()
         msg = String()
         msg.data = encode(result)
         self.publisher.publish(msg)
@@ -86,3 +83,4 @@ def main(args: list[str] | None = None) -> None:
 
 if __name__ == '__main__':
     main()
+
