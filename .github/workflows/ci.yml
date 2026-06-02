@@ -1,20 +1,30 @@
-name: python-syntax
+﻿name: python-syntax
 on:
   pull_request:
   push:
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   syntax:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
       - name: Install test dependencies
         run: python -m pip install -r requirements-dev.txt
       - name: Compile Python files
-        run: python -m compileall src/emrmf_core/emrmf_core src/emrmf_core/launch scripts
+        run: |
+          python --version
+          python -m compileall -f -q src/emrmf_core/emrmf_core src/emrmf_core/launch scripts
       - name: Run unit tests
         run: PYTHONPATH=src/emrmf_core pytest -q src/emrmf_core/test
       - name: Generate robustness comparison

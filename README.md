@@ -124,3 +124,43 @@ PYTHONPATH=src/emrmf_core python3 scripts/generate_scalability_summary.py \
 ```
 
 The generated `docs/scalability_robot_count_summary.csv` contains `robot_count`, `mean_pose_rmse`, `std`, `ci95`, `alignment_rmse`, `fusion_time_ms`, `mean_theta`, `accepted_constraints`, and `success_rate` for robot counts 2, 3, 4, and 5.
+
+## Reviewer-release LIMO Gazebo screenshots
+
+The reviewer screenshot launch uses the lightweight office/laboratory world `emrmf_office_indoor.world` by default. The map is approximately 14 m × 10.5 m and contains multiple rooms, corridors, an entrance corridor, desks, a meeting table, chairs, cabinets, boxes, columns, and small static obstacles so LiDAR scans include enough geometric structure for multi-robot SLAM screenshots and scalability runs.
+
+The launch first looks for an installed `limo_description` package. If that package is unavailable in The Construct or another browser-based Gazebo image, EMRMF automatically uses the included lightweight placeholder model at `src/emrmf_core/models/limo_placeholder/limo_placeholder.urdf.xacro`. The placeholder visually resembles a small four-wheel LIMO-style mobile base and supports `/limo_i/odom`, `/limo_i/tf`, `/limo_i/scan`, and `/limo_i/cmd_vel` when spawned in namespace `/limo_i`.
+
+Build and validate the LIMO screenshot launch:
+
+```bash
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install
+source install/setup.bash
+ros2 launch emrmf_core emrmf_limo_scalability.launch.py robot_count:=2
+ros2 topic list | grep limo
+```
+
+Generate the reviewer-release screenshots with these exact commands:
+
+```bash
+ros2 launch emrmf_core emrmf_limo_scalability.launch.py robot_count:=0
+ros2 launch emrmf_core emrmf_limo_scalability.launch.py robot_count:=2
+ros2 launch emrmf_core emrmf_limo_scalability.launch.py robot_count:=5
+```
+
+Save the screenshots as:
+
+```text
+docs/images/gazebo_environment.png
+docs/images/gazebo_2_robot_experiment.png
+docs/images/gazebo_5_robot_scalability.png
+```
+
+Screenshot capture guidance:
+
+- Use the full Gazebo Classic window, not a cropped viewport.
+- Set the camera to a top or angled top view so the room layout, corridors, entrance corridor, furniture, and obstacles are clearly visible.
+- For `robot_count:=2`, make sure `limo_1` and `limo_2` are visible near their room spawn positions.
+- For `robot_count:=5`, make sure all five LIMO robots are visible across the office, corridor, meeting, and lab areas.
+- Do not save generated `build/`, `install/`, `log/`, rosbag files, videos, or large texture assets in this repository.

@@ -12,6 +12,7 @@
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>xacro</depend>
+  <depend>ament_index_python</depend>
   <depend>robot_state_publisher</depend>
   <depend>gazebo_ros</depend>
   <depend>tf2_ros</depend>

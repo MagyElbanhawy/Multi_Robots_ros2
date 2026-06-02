@@ -1,4 +1,5 @@
 from glob import glob
+import os
 from setuptools import find_packages, setup
 
 package_name = 'emrmf_core'
@@ -14,6 +15,11 @@ setup(
         ('share/' + package_name + '/launch', glob('launch/*.launch.py')),
         ('share/' + package_name + '/worlds', glob('worlds/*.world')),
         ('share/' + package_name + '/urdf', glob('urdf/*.xacro')),
+        *(
+            (os.path.join('share', package_name, os.path.dirname(path)), [path])
+            for path in glob('models/**/*', recursive=True)
+            if os.path.isfile(path)
+        ),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
