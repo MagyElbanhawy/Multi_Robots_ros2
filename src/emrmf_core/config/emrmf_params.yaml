@@ -1,0 +1,60 @@
+/**:
+  ros__parameters:
+    use_sim_time: false
+
+robot_slam_node:
+  ros__parameters:
+    publish_hz: 5.0
+    sensor_noise_std: 0.05
+    latency_hint_s: 0.0
+    fault_bias_m: 0.0
+    landmark_count: 8
+    trajectory_radius_m: 6.0
+
+lora_network_simulator:
+  ros__parameters:
+    delay_s: 0.5
+    jitter_s: 0.05
+    packet_loss: 0.0
+    packet_interval_s: 0.2
+    transmission_distance_m: 250.0
+    random_seed: 7
+
+trust_factor_node:
+  ros__parameters:
+    reference_noise_std: 0.05
+    reference_latency_s: 0.5
+    cubic_exponent: 3.0
+    gamma: 0.35
+    low_trust_threshold: 0.35
+    min_theta: 0.02
+    publish_diagnostics: true
+
+global_fusion_node:
+  ros__parameters:
+    fusion_window: 25
+    server_timeout_s: 3.0
+    min_theta_for_fusion: 0.05
+    publish_hz: 2.0
+
+decentralized_map_node:
+  ros__parameters:
+    peer_timeout_s: 5.0
+    publish_hz: 1.0
+
+adversarial_monitor_node:
+  ros__parameters:
+    residual_threshold_m: 1.5
+    min_samples: 5
+    low_trust_threshold: 0.35
+
+experiment_runner_node:
+  ros__parameters:
+    runs: 5
+    samples_per_run: 200
+    gamma: 0.35
+    exponents: [2.0, 3.0, 4.0]
+    packet_loss_rates: [0.0, 0.1, 0.3]
+    delay_levels_s: [0.5, 2.0, 5.0]
+    noise_levels_std: [0.03, 0.08, 0.16]
+    robot_counts: [2, 3, 4, 5]
