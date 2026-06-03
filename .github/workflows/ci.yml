@@ -1,0 +1,37 @@
+name: python-syntax
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: Install test dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Compile Python files
+        run: |
+          python --version
+          python -m compileall -f -q src/emrmf_core/emrmf_core src/emrmf_core/launch src/emrmf_experiments/emrmf_experiments src/emrmf_experiments/launch scripts
+      - name: Run unit tests
+        run: PYTHONPATH=src/emrmf_core:src/emrmf_experiments pytest -q src/emrmf_core/test src/emrmf_experiments/test
+      - name: Generate robustness comparison
+        run: PYTHONPATH=src/emrmf_core python scripts/generate_robustness_comparison.py --runs 3 --samples-per-run 50 --markdown-out /tmp/robustness.md --csv-out /tmp/robustness.csv
+      - name: Generate ablation summary
+        run: PYTHONPATH=src/emrmf_core python scripts/generate_ablation_summary.py --runs 3 --samples-per-run 50 --markdown-out /tmp/ablation.md --csv-out /tmp/ablation.csv
+      - name: Generate scalability summary
+        run: PYTHONPATH=src/emrmf_core python scripts/generate_scalability_summary.py --trials 3 --samples-per-robot 50 --markdown-out /tmp/scalability.md --csv-out /tmp/scalability_robot_count_summary.csv
+      - name: Generate EMRMF experiment validation artifacts
+        run: PYTHONPATH=src/emrmf_experiments python scripts/generate_emrmf_experiment_validation.py --output-dir /tmp/emrmf_experiment_logs --p-values 2,3 --gamma-values 0.1,0.3 --delay-values 0.5,2.0 --packet-loss-values 0.10,0.30 --sensor-noise-values 0.10,0.20,0.30 --repeated-runs 5

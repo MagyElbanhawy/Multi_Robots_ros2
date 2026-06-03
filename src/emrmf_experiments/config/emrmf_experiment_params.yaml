@@ -1,0 +1,64 @@
+emrmf_communication_proxy:
+  ros__parameters:
+    delay_s: 0.5
+    packet_loss: 0.10
+    random_seed: 2026
+    topic_pairs_json: >-
+      [
+        {"input":"/robot1/local_map","output":"/proxy/robot1/local_map","type":"std_msgs/msg/String"},
+        {"input":"/robot2/local_map","output":"/proxy/robot2/local_map","type":"std_msgs/msg/String"},
+        {"input":"/robot1/pose_update","output":"/proxy/robot1/pose_update","type":"nav_msgs/msg/Odometry"},
+        {"input":"/robot2/pose_update","output":"/proxy/robot2/pose_update","type":"nav_msgs/msg/Odometry"},
+        {"input":"/map_fusion/inter_robot_constraints","output":"/proxy/map_fusion/inter_robot_constraints","type":"std_msgs/msg/String"}
+      ]
+
+emrmf_experiment_logger:
+  ros__parameters:
+    output_dir: docs/emrmf_experiment_logs
+    ablation_mode: full_emrmf
+    p: 3.0
+    gamma: 0.3
+    tau_e: 0.5
+    delay_s: 0.5
+    packet_loss: 0.10
+    sensor_noise: 0.0
+    run_id: 1
+    configuration_id: manual_live
+    estimated_pose_topics_json: >-
+      [
+        {"robot_id":"robot1","topic":"/robot1/odom","type":"Odometry"},
+        {"robot_id":"robot2","topic":"/robot2/odom","type":"Odometry"}
+      ]
+    ground_truth_topics_json: >-
+      [
+        {"robot_id":"robot1","topic":"/robot1/ground_truth","type":"Odometry"},
+        {"robot_id":"robot2","topic":"/robot2/ground_truth","type":"Odometry"}
+      ]
+    reference_trajectory_csv: ""
+    source_matched_points_topic: /map_fusion/source_matched_points
+    target_matched_points_topic: /map_fusion/target_matched_points
+    source_transform_xyz_yaw: [0.0, 0.0, 0.0, 0.0]
+    constraint_error_topic: /map_fusion/constraint_error_norm
+    observed_relative_transform_topic: /map_fusion/observed_relative_transform
+    predicted_relative_transform_topic: /map_fusion/predicted_relative_transform
+    fusion_time_topic: /map_fusion/fusion_time_ms
+    summary_period_s: 5.0
+
+emrmf_experiment_orchestrator:
+  ros__parameters:
+    launch_package: emrmf_core
+    launch_file: emrmf_sim.launch.py
+    run_duration_s: 120.0
+    use_experiment_done_topic: true
+    repeated_runs: 5
+    tau_e: 0.5
+    p_values: [2.0, 3.0, 4.0]
+    gamma_values: [0.1, 0.3, 0.5, 1.0]
+    delay_values: [0.0, 0.5, 2.0]
+    packet_loss_values: [0.0, 0.10, 0.30]
+    sensor_noise_values: [0.0]
+    ablation_modes:
+      - baseline_graph_slam
+      - decentralized_only
+      - trust_only
+      - full_emrmf
