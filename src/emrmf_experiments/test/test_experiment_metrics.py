@@ -7,6 +7,7 @@ from emrmf_experiments.metrics import (
     compute_theta,
     pose_rmse,
     summarize_raw_rows,
+    latex_table,
 )
 from emrmf_experiments.validation_simulator import generate_validation_artifacts
 
@@ -60,3 +61,32 @@ def test_validation_generator_writes_raw_summary_markdown_and_latex(tmp_path: Pa
     assert all(row['runs'] == 5 for row in result['summary_rows'])
     assert '95% confidence interval' in Path(result['summary_markdown']).read_text(encoding='utf-8')
     assert '\\begin{table}' in Path(result['summary_latex']).read_text(encoding='utf-8')
+
+
+def test_latex_table_escapes_modes_and_terminates_rows():
+    rows = summarize_raw_rows([
+        {
+            'timestamp': '2026-06-03T00:00:00Z',
+            'configuration_id': 'demo',
+            'run_id': 1,
+            'ablation_mode': 'baseline_graph_slam',
+            'p': 3.0,
+            'gamma': 0.3,
+            'tau_e': 0.5,
+            'delay_s': 0.5,
+            'packet_loss': 0.1,
+            'sensor_noise': 0.2,
+            'pose_rmse': 0.1,
+            'map_alignment_rmse': 0.2,
+            'fusion_time_ms': 10.0,
+            'theta_mean': 0.8,
+            'theta_std': 0.05,
+            'false_constraint_acceptance_rate': 0.01,
+            'map_consistency_score': 0.9,
+            'accepted_constraints': 42,
+            'success': 1,
+        }
+    ])
+    latex = latex_table(rows)
+    assert r'baseline\_graph\_slam' in latex
+    assert r'0.800 \\' in latex

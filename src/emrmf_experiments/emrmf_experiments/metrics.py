@@ -243,13 +243,22 @@ def latex_table(rows: Sequence[dict], caption: str = 'EMRMF experiment summary')
         r'Mode & $p$ & $\gamma$ & Delay & Loss & Runs & Pose RMSE & 95\% CI & $\bar{\theta}$ \\',
         r'\hline',
     ]
+    latex_newline = r'\\'
     for row in rows:
-        lines.append(
-        f"{row['ablation_mode'].replace('_', r'\_')} & {float(row['p']):.0f} & {float(row['gamma']):.2f} & "
-        f"{float(row['delay_s']):.2f} & {float(row['packet_loss']):.2f} & {int(row['runs'])} & "
-        f"{float(row['pose_rmse_mean']):.4f} & {float(row['pose_rmse_ci95']):.4f} & "
-        f"{float(row['theta_mean']):.3f}" + " \\\\"
-    )
+        escaped_mode = row['ablation_mode'].replace('_', r'\_')
+        row_values = (
+            escaped_mode,
+            float(row['p']),
+            float(row['gamma']),
+            float(row['delay_s']),
+            float(row['packet_loss']),
+            int(row['runs']),
+            float(row['pose_rmse_mean']),
+            float(row['pose_rmse_ci95']),
+            float(row['theta_mean']),
+            latex_newline,
+        )
+        lines.append('{} & {:.0f} & {:.2f} & {:.2f} & {:.2f} & {} & {:.4f} & {:.4f} & {:.3f} {}'.format(*row_values))
     lines.extend([
         r'\hline',
         r'\end{tabular}',
