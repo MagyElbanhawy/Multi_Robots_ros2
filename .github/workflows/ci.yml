@@ -1,4 +1,5 @@
 name: python-syntax
+﻿name: python-syntax
 on:
   pull_request:
   push:
@@ -27,6 +28,9 @@ jobs:
           python -m compileall -f -q src/emrmf_core/emrmf_core src/emrmf_core/launch src/emrmf_experiments/emrmf_experiments src/emrmf_experiments/launch scripts
       - name: Run unit tests
         run: PYTHONPATH=src/emrmf_core:src/emrmf_experiments pytest -q src/emrmf_core/test src/emrmf_experiments/test
+          python -m compileall -f -q src/emrmf_core/emrmf_core src/emrmf_core/launch scripts
+      - name: Run unit tests
+        run: PYTHONPATH=src/emrmf_core pytest -q src/emrmf_core/test
       - name: Generate robustness comparison
         run: PYTHONPATH=src/emrmf_core python scripts/generate_robustness_comparison.py --runs 3 --samples-per-run 50 --markdown-out /tmp/robustness.md --csv-out /tmp/robustness.csv
       - name: Generate ablation summary
