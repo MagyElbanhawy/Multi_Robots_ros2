@@ -1,5 +1,4 @@
 """Offline ablation and sensitivity runner for reviewer-facing EMRMF evidence."""
-﻿"""Offline ablation and sensitivity runner for reviewer-facing EMRMF evidence."""
 
 from __future__ import annotations
 
