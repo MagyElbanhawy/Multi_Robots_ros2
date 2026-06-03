@@ -164,3 +164,138 @@ Screenshot capture guidance:
 - For `robot_count:=2`, make sure `limo_1` and `limo_2` are visible near their room spawn positions.
 - For `robot_count:=5`, make sure all five LIMO robots are visible across the office, corridor, meeting, and lab areas.
 - Do not save generated `build/`, `install/`, `log/`, rosbag files, videos, or large texture assets in this repository.
+
+## Screenshots
+
+![Environment](docs/images/gazebo_environment.png)
+
+![2 Robots](docs/images/gazebo_2_robot_experiment.png)
+
+![5 Robots](docs/images/gazebo_5_robot_scalability.png)
+
+![Global Map](docs/images/rviz_global_map.png)
+
+![Trust Factor](docs/images/trust_factor_visualization.png)
+
+## EMRMF experiment-validation package
+
+The repository now includes a dedicated ROS 2 Humble experiment-validation package, `emrmf_experiments`, for Springer revision evidence generation. This package is an active experiment orchestrator plus logger, not only a passive robot controller.
+
+### What it validates
+
+`emrmf_experiments` supports reviewer-ready evidence for:
+
+- trust-factor sensitivity for `p = [2, 3, 4]`,
+- gamma sensitivity for `gamma = [0.1, 0.3, 0.5, 1.0]`,
+- communication robustness under artificial delay `[0.0, 0.5, 2.0]` seconds,
+- packet loss `[0.0, 0.10, 0.30]`,
+- ablation modes `baseline_graph_slam`, `decentralized_only`, `trust_only`, and `full_emrmf`,
+- five repeated runs per configuration,
+- statistical summaries with mean, standard deviation, and 95% confidence interval.
+
+The logger computes the requested trust factor formula:
+
+```text
+theta = max(0, 1 - (norm(e_ij) / tau_e)^p) * exp(-gamma * delta_t)
+```
+
+`tau_e` defaults to `0.5` and is configurable in `src/emrmf_experiments/config/emrmf_experiment_params.yaml`.
+
+### Portable delay and packet-loss proxy
+
+The communication proxy node simulates network degradation inside ROS 2, so Linux `tc/netem` is not required. It subscribes to configurable input topics, buffers messages to inject delay, randomly drops messages for packet loss, and republishes accepted messages on proxied topics.
+
+Default input topics:
+
+```text
+/robot1/local_map
+/robot2/local_map
+/robot1/pose_update
+/robot2/pose_update
+/map_fusion/inter_robot_constraints
+```
+
+Default output topics:
+
+```text
+/proxy/robot1/local_map
+/proxy/robot2/local_map
+/proxy/robot1/pose_update
+/proxy/robot2/pose_update
+/proxy/map_fusion/inter_robot_constraints
+```
+
+Edit `topic_pairs_json` in `src/emrmf_experiments/config/emrmf_experiment_params.yaml` to add more robots or communication topics.
+
+### Live experiment logging
+
+The live logger uses ROS 2 topics first. Estimated pose and ground-truth topics are configurable and support `nav_msgs/msg/Odometry` by default, with `geometry_msgs/msg/PoseStamped` also supported. If no ground-truth topic is available, provide `reference_trajectory_csv` in the YAML configuration.
+
+For map alignment RMSE, the logger uses standard `sensor_msgs/msg/PointCloud2` topics:
+
+```text
+/map_fusion/source_matched_points
+/map_fusion/target_matched_points
+```
+
+If point order is not guaranteed, nearest-neighbor distance is used for the alignment RMSE. The optional `source_transform_xyz_yaw` YAML parameter applies the fusion-estimated source-to-target transform before computing the point residuals.
+
+The logger saves:
+
+- timestamped raw CSV logs,
+- final summary CSV tables,
+- Markdown tables,
+- LaTeX tables for Springer manuscript insertion.
+
+Run the live proxy/logger:
+
+```bash
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install
+source install/setup.bash
+ros2 launch emrmf_experiments emrmf_experiment_validation.launch.py
+```
+
+Run the active orchestrator over repeated parameter configurations:
+
+```bash
+ros2 launch emrmf_experiments emrmf_experiment_orchestrator.launch.py
+```
+
+The orchestrator starts configured ROS 2 launch files with Python `subprocess`, waits for the fixed run duration (`120` seconds by default), and stops early if `/experiment_done` publishes `std_msgs/msg/Bool(data=True)`.
+
+### Offline reviewer artifact generation
+
+When ROS 2 live data is unavailable, generate deterministic reviewer-ready validation artifacts with:
+
+```bash
+PYTHONPATH=src/emrmf_experiments python3 scripts/generate_emrmf_experiment_validation.py \
+  --output-dir docs/emrmf_experiment_logs \
+  --p-values 2,3,4 \
+  --gamma-values 0.1,0.3,0.5,1.0 \
+  --delay-values 0.0,0.5,2.0 \
+  --packet-loss-values 0.0,0.10,0.30 \
+  --repeated-runs 5 \
+  --tau-e 0.5
+```
+
+For the requested robustness comparison between `p=2` and `p=3` under 10%, 20%, and 30% sensor noise, 0.5 s and 2.0 s delay, and 10% and 30% packet loss, run:
+
+```bash
+PYTHONPATH=src/emrmf_experiments python3 scripts/generate_emrmf_experiment_validation.py \
+  --output-dir docs/emrmf_experiment_logs/p2_vs_p3_robustness \
+  --p-values 2,3 \
+  --gamma-values 0.3 \
+  --delay-values 0.5,2.0 \
+  --packet-loss-values 0.10,0.30 \
+  --sensor-noise-values 0.10,0.20,0.30 \
+  --repeated-runs 5
+```
+
+Outputs include RMSE, false constraint acceptance rate, map consistency score, trust variance (`theta_std`), delay, packet loss, `theta_mean`, fusion time, and statistical summaries.
+
+If the EMRMF fusion node publishes `e_ij` directly, use `/map_fusion/constraint_error_norm`. If it does not, publish observed and predicted relative transforms as `std_msgs/msg/Float64MultiArray` on `/map_fusion/observed_relative_transform` and `/map_fusion/predicted_relative_transform`; the logger computes `e_ij = observed_relative_transform - predicted_relative_transform` internally.
+
+### GitHub synchronization note
+
+If `Test-Path src/emrmf_experiments` returns `False` on Windows, the local clone is either in the wrong folder or GitHub `main` has not yet received the experiment-validation branch. Follow `docs/github_sync_instructions.md` to verify the remote, push `codex/add-emrmf-experiments-validation`, merge it into `main`, and confirm that the package is present.
