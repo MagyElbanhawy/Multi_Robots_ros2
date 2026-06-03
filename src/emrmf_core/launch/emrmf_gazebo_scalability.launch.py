@@ -15,6 +15,7 @@ def _spawn_robots(context, *args, **kwargs):
     enable_depth_camera = LaunchConfiguration('enable_depth_camera')
     xacro_path = PathJoinSubstitution([FindPackageShare('emrmf_core'), 'urdf', 'emrmf_mobile_robot.urdf.xacro'])
     initial_poses = [(-6.2, -4.0, 0.0), (-6.2, 4.0, 0.0), (6.2, -4.0, 3.14), (6.2, 4.0, 3.14), (0.0, -4.1, 1.57)]
+    
     actions = []
     for index in range(robot_count):
         robot_name = f'robot_{index + 1}'

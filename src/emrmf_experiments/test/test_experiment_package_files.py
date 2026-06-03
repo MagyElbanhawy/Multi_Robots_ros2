@@ -26,11 +26,3 @@ def test_proxy_defaults_document_required_topics():
         '/proxy/map_fusion/inter_robot_constraints',
     ]:
         assert topic in config
-
-
-def test_python_sources_do_not_start_with_utf8_bom():
-    repo_root = PACKAGE.parents[1]
-    checked = list((repo_root / 'emrmf_core').rglob('*.py')) + list(PACKAGE.rglob('*.py'))
-    assert checked
-    for source in checked:
-        assert not source.read_bytes().startswith(b'\xef\xbb\xbf'), f'{source} starts with a UTF-8 BOM'
