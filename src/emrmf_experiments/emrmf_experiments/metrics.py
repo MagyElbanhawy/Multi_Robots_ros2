@@ -245,11 +245,11 @@ def latex_table(rows: Sequence[dict], caption: str = 'EMRMF experiment summary')
     ]
     for row in rows:
         lines.append(
-            f"{row['ablation_mode'].replace('_', r'\_')} & {float(row['p']):.0f} & {float(row['gamma']):.2f} & "
-            f"{float(row['delay_s']):.2f} & {float(row['packet_loss']):.2f} & {int(row['runs'])} & "
-            f"{float(row['pose_rmse_mean']):.4f} & {float(row['pose_rmse_ci95']):.4f} & "
-            f"{float(row['theta_mean']):.3f} \\\\" 
-        )
+        f"{row['ablation_mode'].replace('_', r'\_')} & {float(row['p']):.0f} & {float(row['gamma']):.2f} & "
+        f"{float(row['delay_s']):.2f} & {float(row['packet_loss']):.2f} & {int(row['runs'])} & "
+        f"{float(row['pose_rmse_mean']):.4f} & {float(row['pose_rmse_ci95']):.4f} & "
+        f"{float(row['theta_mean']):.3f}" + " \\\\"
+    )
     lines.extend([
         r'\hline',
         r'\end{tabular}',
