@@ -1,5 +1,4 @@
 name: python-syntax
-﻿name: python-syntax
 on:
   pull_request:
   push:
