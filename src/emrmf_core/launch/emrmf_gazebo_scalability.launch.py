@@ -44,7 +44,6 @@ def _spawn_robots(context, *args, **kwargs):
                 arguments=[
                     '-topic', f'/{robot_name}/robot_description',
                     '-entity', robot_name,
-                    '-robot_namespace', robot_name,
                     '-x', str(x), '-y', str(y), '-z', '0.08', '-Y', str(yaw),
                 ],
                 output='screen',
