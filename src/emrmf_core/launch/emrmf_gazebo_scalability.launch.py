@@ -86,6 +86,7 @@ def generate_launch_description():
         OpaqueFunction(function=_spawn_robots),
         Node(package='emrmf_core', executable='lora_network_simulator', name='lora_network_simulator', output='screen'),
         Node(package='emrmf_core', executable='trust_factor_node', name='trust_factor_node', output='screen'),
+        Node(package='emrmf_core', executable='trust_logger_node', name='trust_logger_node', output='screen'),
         Node(package='emrmf_core', executable='global_fusion_node', name='global_fusion_node', output='screen'),
         Node(package='emrmf_core', executable='scalability_experiment_logger_node', name='emrmf_scalability_logger', parameters=[{'trials': LaunchConfiguration('trials'), 'sensor_noise_std': LaunchConfiguration('sensor_noise_std')}], output='screen'),
         Node(package='emrmf_core', executable='experiment_runner_node', name='emrmf_experiment_logger', output='screen'),

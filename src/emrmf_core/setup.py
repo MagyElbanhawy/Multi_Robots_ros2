@@ -33,6 +33,7 @@ setup(
             'robot_slam_node = emrmf_core.robot_slam_node:main',
             'lora_network_simulator = emrmf_core.lora_network_simulator:main',
             'trust_factor_node = emrmf_core.trust_factor_node:main',
+            'trust_logger_node = emrmf_core.trust_logger_node:main',
             'decentralized_map_node = emrmf_core.decentralized_map_node:main',
             'global_fusion_node = emrmf_core.global_fusion_node:main',
             'adversarial_monitor_node = emrmf_core.adversarial_monitor_node:main',

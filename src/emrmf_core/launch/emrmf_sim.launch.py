@@ -52,6 +52,13 @@ def generate_launch_description():
         ),
         Node(
             package='emrmf_core',
+            executable='trust_logger_node',
+            name='trust_logger_node',
+            parameters=[params],
+            output='screen',
+        ),
+        Node(
+            package='emrmf_core',
             executable='global_fusion_node',
             name='global_fusion_node',
             parameters=[params],

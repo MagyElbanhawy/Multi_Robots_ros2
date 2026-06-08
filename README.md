@@ -175,6 +175,8 @@ Screenshot capture guidance:
 
 ![5 Robots](docs/images/gazebo_5_robot_scalability.png)
 
+![Trust Factor](docs/images/trust_factor_visualization.png)
+
 ## EMRMF experiment-validation package
 
 The repository now includes a dedicated ROS 2 Humble experiment-validation package, `emrmf_experiments`, for Springer revision evidence generation. This package is an active experiment orchestrator plus logger, not only a passive robot controller.
