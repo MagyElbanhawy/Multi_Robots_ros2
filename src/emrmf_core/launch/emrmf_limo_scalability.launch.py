@@ -117,7 +117,6 @@ def _spawn_limo_robots(context, *args, **kwargs):
                 arguments=[
                     '-topic', f'/{robot_name}/robot_description',
                     '-entity', robot_name,
-                    '-robot_namespace', robot_namespace,
                     '-x', str(x), '-y', str(y), '-z', '0.16', '-Y', str(yaw),
                 ],
                 output='screen',
