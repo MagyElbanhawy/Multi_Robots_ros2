@@ -63,7 +63,7 @@ def fig02_architecture(output: Path) -> None:
         ((4.7, 3.2), 'Phase 2\nLoRa / DDS\nlatency + loss', AMBER),
         ((7.9, 3.2), 'Phase 3\nTrust-weighted\nglobal fusion', GREEN),
         ((1.5, 1.1), 'Robot team\n2-5 agents', GRAY),
-        ((4.7, 1.1), 'Trust factor\nθ from noise + delay', RED),
+        ((4.7, 1.1), 'Trust factor\ntheta from noise + delay', RED),
         ((7.9, 1.1), 'Outputs\nfused map + alerts', GREEN),
     ]
     for xy, text, color in labels:
@@ -141,7 +141,7 @@ def fig05_trust_curves(output: Path) -> None:
         theta = np.maximum(0.0, 1.0 - np.power(residual / tau, p))
         ax.plot(residual, theta, lw=2, label=f'p={p}', color=color)
     ax.set_xlabel('Residual norm ||e_ij||')
-    ax.set_ylabel('Trust factor θ')
+    ax.set_ylabel(r'Trust factor $\theta$')
     ax.set_title('Conceptual Trust Curves')
     ax.grid(True, alpha=0.35)
     ax.legend()
@@ -183,7 +183,11 @@ def fig10_delay_loss(repo: Path, output: Path) -> None:
         (axes[1], 'packet_loss', 'RMSE vs packet loss', RED),
     ]:
         part = best[best['stressor'] == stressor].sort_values('level')
-        ax.bar(part['level'].astype(str), part['mean_rmse_m'], yerr=part['ci95_rmse_m'], capsize=4, color=color, alpha=0.85)
+        if stressor == 'delay':
+            labels = [f'{value:.1f} s' for value in part['level']]
+        else:
+            labels = [f'{int(round(value * 100))}%' for value in part['level']]
+        ax.bar(labels, part['mean_rmse_m'], yerr=part['ci95_rmse_m'], capsize=4, color=color, alpha=0.85)
         ax.set_title(title)
         ax.set_xlabel('Level')
         ax.grid(axis='y', alpha=0.3)
@@ -194,7 +198,7 @@ def fig10_delay_loss(repo: Path, output: Path) -> None:
 
 def fig11_p_gamma_heatmap(output: Path) -> None:
     p_values = np.array([2.0, 3.0, 4.0])
-    gamma_values = np.array([0.15, 0.35, 0.70, 1.00])
+    gamma_values = np.array([0.00, 0.15, 0.35, 0.70])
     heatmap = np.zeros((len(gamma_values), len(p_values)))
     for i, gamma in enumerate(gamma_values):
         for j, p in enumerate(p_values):
@@ -202,10 +206,10 @@ def fig11_p_gamma_heatmap(output: Path) -> None:
     fig, ax = plt.subplots(figsize=(7, 4))
     im = ax.imshow(heatmap, cmap='YlGnBu_r')
     ax.set_xticks(range(len(p_values)), [f'p={p:g}' for p in p_values])
-    ax.set_yticks(range(len(gamma_values)), [f'γ={g:g}' for g in gamma_values])
-    ax.set_title('p and γ Sensitivity Heatmap')
+    ax.set_yticks(range(len(gamma_values)), [f'gamma={g:.2f}' for g in gamma_values])
+    ax.set_title('p and gamma Sensitivity Heatmap')
     ax.set_xlabel('Trust exponent')
-    ax.set_ylabel('Temporal decay γ')
+    ax.set_ylabel('Temporal decay gamma')
     for i in range(heatmap.shape[0]):
         for j in range(heatmap.shape[1]):
             ax.text(j, i, f'{heatmap[i, j]:.3f}', ha='center', va='center', fontsize=9)
@@ -215,13 +219,18 @@ def fig11_p_gamma_heatmap(output: Path) -> None:
 
 def fig12_scalability(repo: Path, output: Path) -> None:
     df = pd.read_csv(repo / 'docs/scalability_robot_count_summary.csv')
-    fig, ax = plt.subplots(figsize=(8, 4))
-    ax.errorbar(df['robot_count'], df['mean_pose_rmse'], yerr=df['ci95'], marker='o', lw=2, capsize=4, color=BLUE)
-    ax.set_xlabel('Robot count')
-    ax.set_ylabel('Mean pose RMSE (m)')
-    ax.set_title('Scalability: RMSE vs Robot Count')
-    ax.set_xticks(df['robot_count'])
-    ax.grid(True, alpha=0.35)
+    fig, ax1 = plt.subplots(figsize=(8, 4))
+    ax1.errorbar(df['robot_count'], df['mean_pose_rmse'], yerr=df['ci95'], marker='o', lw=2, capsize=4, color=BLUE, label='RMSE')
+    ax1.set_xlabel('Robot count')
+    ax1.set_ylabel('Mean pose RMSE (m)', color=BLUE)
+    ax1.tick_params(axis='y', labelcolor=BLUE)
+    ax1.set_xticks(df['robot_count'])
+    ax1.grid(True, alpha=0.35)
+    ax2 = ax1.twinx()
+    ax2.plot(df['robot_count'], df['fusion_time_ms'], marker='s', lw=2, color=AMBER, label='Fusion time')
+    ax2.set_ylabel('Fusion time (ms)', color=AMBER)
+    ax2.tick_params(axis='y', labelcolor=AMBER)
+    fig.suptitle('Scalability: Accuracy and Fusion Cost vs Robot Count', fontsize=14, weight='bold')
     save(fig, output / 'figure_12_rmse_vs_robot_count.png')
 
 
