@@ -1,5 +1,7 @@
 # EMRMF ROS 2 Multi-Robot SLAM Reference Environment
 
+![CI](https://github.com/MagyElbanhawy/Multi_Robots_ros2/actions/workflows/ci.yml/badge.svg)
+
 This repository provides a runnable ROS 2 Humble environment for the **Enhanced Multi-Robot Map Fusion (EMRMF)** architecture described in the PhD paper revision.  It is designed to support reviewer-requested experiments around trust-factor ablations, LoRa latency/packet-loss sensitivity, hybrid-vs-decentralized fault tolerance, adversarial robot handling, and ROS 2 DDS/QoS implementation details.
 
 ## What is included
@@ -295,7 +297,3 @@ PYTHONPATH=src/emrmf_experiments python3 scripts/generate_emrmf_experiment_valid
 Outputs include RMSE, false constraint acceptance rate, map consistency score, trust variance (`theta_std`), delay, packet loss, `theta_mean`, fusion time, and statistical summaries.
 
 If the EMRMF fusion node publishes `e_ij` directly, use `/map_fusion/constraint_error_norm`. If it does not, publish observed and predicted relative transforms as `std_msgs/msg/Float64MultiArray` on `/map_fusion/observed_relative_transform` and `/map_fusion/predicted_relative_transform`; the logger computes `e_ij = observed_relative_transform - predicted_relative_transform` internally.
-
-### GitHub synchronization note
-
-If `Test-Path src/emrmf_experiments` returns `False` on Windows, the local clone is either in the wrong folder or GitHub `main` has not yet received the experiment-validation branch. Follow `docs/github_sync_instructions.md` to verify the remote, push `codex/add-emrmf-experiments-validation`, merge it into `main`, and confirm that the package is present.
