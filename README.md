@@ -131,7 +131,7 @@ The generated `docs/scalability_robot_count_summary.csv` contains `robot_count`,
 
 The reviewer screenshot launch uses the lightweight office/laboratory world `emrmf_office_indoor.world` by default. The map is approximately 14 m × 10.5 m and contains multiple rooms, corridors, an entrance corridor, desks, a meeting table, chairs, cabinets, boxes, columns, and small static obstacles so LiDAR scans include enough geometric structure for multi-robot SLAM screenshots and scalability runs.
 
-The launch first looks for an installed `limo_description` package. If that package is unavailable in The Construct or another browser-based Gazebo image, EMRMF automatically uses the included lightweight placeholder model at `src/emrmf_core/models/limo_placeholder/limo_placeholder.urdf.xacro`. The placeholder visually resembles a small four-wheel LIMO-style mobile base and supports `/limo_i/odom`, `/limo_i/tf`, `/limo_i/scan`, and `/limo_i/cmd_vel` when spawned in namespace `/limo_i`.
+The launch uses the included lightweight placeholder model at `src/emrmf_core/models/limo_placeholder/limo_placeholder.urdf.xacro` by default. The placeholder visually resembles a small four-wheel LIMO-style mobile base and supports `/limo_i/odom`, `/limo_i/tf`, `/limo_i/scan`, and `/limo_i/cmd_vel` when spawned in namespace `/limo_i`. If you explicitly want to try an installed AgileX `limo_description` model, pass `use_installed_limo:=true`.
 
 Build and validate the LIMO screenshot launch:
 

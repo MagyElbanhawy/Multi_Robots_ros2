@@ -28,14 +28,26 @@ LIMO_SPAWN_POSES = [
 ]
 
 
-def _find_limo_description() -> tuple[Path, bool]:
+def _placeholder_limo_description() -> Path:
+    return (
+        Path(get_package_share_directory('emrmf_core'))
+        / 'models'
+        / 'limo_placeholder'
+        / 'limo_placeholder.urdf.xacro'
+    )
+
+
+def _find_limo_description(use_installed_limo: bool) -> tuple[Path, bool]:
     """Return a LIMO xacro path and whether it is the EMRMF placeholder.
 
-    The Construct/browser images used for reviewer screenshots may not include
-    AgileX's ``limo_description`` package.  When it is available, prefer its
-    URDF/Xacro; otherwise use the lightweight Gazebo-compatible placeholder
-    installed by ``emrmf_core``.
+    By default this launch uses the lightweight Gazebo-compatible EMRMF
+    placeholder.  Some installed AgileX LIMO descriptions are visualization-only
+    or use different command topics, so they can spawn partially or fail to move
+    in reviewer screenshot environments.
     """
+
+    if not use_installed_limo:
+        return _placeholder_limo_description(), True
 
     candidate_names = (
         'urdf/limo_four_diff.xacro',
@@ -53,13 +65,7 @@ def _find_limo_description() -> tuple[Path, bool]:
     except PackageNotFoundError:
         pass
 
-    fallback = (
-        Path(get_package_share_directory('emrmf_core'))
-        / 'models'
-        / 'limo_placeholder'
-        / 'limo_placeholder.urdf.xacro'
-    )
-    return fallback, True
+    return _placeholder_limo_description(), True
 
 
 def _robot_description_command(
@@ -85,7 +91,8 @@ def _spawn_limo_robots(context, *args, **kwargs):
         raise ValueError('robot_count must be one of 0, 2, 3, 4, or 5')
 
     sensor_noise_std = LaunchConfiguration('sensor_noise_std')
-    xacro_path, is_placeholder = _find_limo_description()
+    use_installed_limo = LaunchConfiguration('use_installed_limo').perform(context).lower() in {'1', 'true', 'yes'}
+    xacro_path, is_placeholder = _find_limo_description(use_installed_limo)
     actions = []
     for index in range(robot_count):
         robot_name = f'limo_{index + 1}'
@@ -161,6 +168,7 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('robot_count', default_value='2', description='LIMO count: 0, 2, 3, 4, or 5.'),
         DeclareLaunchArgument('sensor_noise_std', default_value='0.02', description='Gaussian noise for LIMO odometry and LiDAR.'),
+        DeclareLaunchArgument('use_installed_limo', default_value='false', description='Use an installed limo_description model instead of the EMRMF Gazebo-compatible placeholder.'),
         DeclareLaunchArgument('trials', default_value='5', description='Trials per robot count for the scalability logger.'),
         ExecuteProcess(cmd=['bash', '-lc', 'echo Starting EMRMF LIMO Gazebo scalability launch'], output='screen'),
         gazebo,
