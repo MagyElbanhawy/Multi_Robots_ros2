@@ -151,6 +151,26 @@ ros2 launch emrmf_core emrmf_limo_scalability.launch.py robot_count:=2
 ros2 launch emrmf_core emrmf_limo_scalability.launch.py robot_count:=5
 ```
 
+Record a short movement video with the five-robot launch:
+
+```bash
+ros2 launch emrmf_core emrmf_limo_scalability.launch.py \
+  robot_count:=5 \
+  use_installed_limo:=false \
+  demo_duration_s:=120 \
+  linear_speed_mps:=0.38 \
+  angular_scale:=0.50
+```
+
+The robots move for two minutes by default, which is long enough to capture a reviewer video. Use the full Gazebo Classic window and record the screen with your desktop recorder, for example:
+
+```bash
+ffmpeg -video_size 1280x720 -framerate 30 -f x11grab -i :0.0+0,0 \
+  -t 60 docs/images/limo_5_robot_motion.mp4
+```
+
+If you need continuous movement while recording, pass `demo_duration_s:=0`.
+
 Save the screenshots as:
 
 ```text
@@ -165,7 +185,7 @@ Screenshot capture guidance:
 - Set the camera to a top or angled top view so the room layout, corridors, entrance corridor, furniture, and obstacles are clearly visible.
 - For `robot_count:=2`, make sure `limo_1` and `limo_2` are visible near their room spawn positions.
 - For `robot_count:=5`, make sure all five LIMO robots are visible across the office, corridor, meeting, and lab areas.
-- Do not save generated `build/`, `install/`, `log/`, rosbag files, videos, or large texture assets in this repository.
+- Do not save generated `build/`, `install/`, `log/`, rosbag files, raw videos, or large texture assets in this repository. A short compressed reviewer video or GIF under `docs/images/` is acceptable.
 
 ## Screenshots
 

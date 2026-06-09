@@ -91,6 +91,9 @@ def _spawn_limo_robots(context, *args, **kwargs):
         raise ValueError('robot_count must be one of 0, 2, 3, 4, or 5')
 
     sensor_noise_std = LaunchConfiguration('sensor_noise_std')
+    linear_speed_mps = LaunchConfiguration('linear_speed_mps')
+    angular_scale = LaunchConfiguration('angular_scale')
+    demo_duration_s = LaunchConfiguration('demo_duration_s')
     use_installed_limo = LaunchConfiguration('use_installed_limo').perform(context).lower() in {'1', 'true', 'yes'}
     xacro_path, is_placeholder = _find_limo_description(use_installed_limo)
     actions = []
@@ -136,8 +139,9 @@ def _spawn_limo_robots(context, *args, **kwargs):
                 parameters=[{
                     'robot_id': robot_name,
                     'trajectory_id': index,
-                    'linear_speed_mps': 0.34,
-                    'angular_scale': 0.55,
+                    'linear_speed_mps': ParameterValue(linear_speed_mps, value_type=float),
+                    'angular_scale': ParameterValue(angular_scale, value_type=float),
+                    'demo_duration_s': ParameterValue(demo_duration_s, value_type=float),
                 }],
                 output='screen',
             ),
@@ -169,6 +173,9 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('robot_count', default_value='2', description='LIMO count: 0, 2, 3, 4, or 5.'),
         DeclareLaunchArgument('sensor_noise_std', default_value='0.02', description='Gaussian noise for LIMO odometry and LiDAR.'),
+        DeclareLaunchArgument('linear_speed_mps', default_value='0.38', description='Forward speed for the video/demo trajectory.'),
+        DeclareLaunchArgument('angular_scale', default_value='0.50', description='Angular velocity scale for smooth visible motion.'),
+        DeclareLaunchArgument('demo_duration_s', default_value='120.0', description='Seconds to keep robots moving before publishing zero velocity; set 0 for continuous motion.'),
         DeclareLaunchArgument('use_installed_limo', default_value='false', description='Use an installed limo_description model instead of the EMRMF Gazebo-compatible placeholder.'),
         DeclareLaunchArgument('trials', default_value='5', description='Trials per robot count for the scalability logger.'),
         ExecuteProcess(cmd=['bash', '-lc', 'echo Starting EMRMF LIMO Gazebo scalability launch'], output='screen'),

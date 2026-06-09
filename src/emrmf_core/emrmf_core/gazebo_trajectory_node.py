@@ -20,6 +20,7 @@ class GazeboTrajectoryNode(Node):
         self.declare_parameter('trajectory_id', 0)
         self.declare_parameter('linear_speed_mps', 0.28)
         self.declare_parameter('angular_scale', 0.75)
+        self.declare_parameter('demo_duration_s', 0.0)
         self.declare_parameter('publish_hz', 20.0)
         self.robot_id = str(self.get_parameter('robot_id').value)
         self.trajectory_id = int(self.get_parameter('trajectory_id').value)
@@ -29,6 +30,11 @@ class GazeboTrajectoryNode(Node):
 
     def publish_command(self) -> None:
         elapsed = (self.get_clock().now() - self.start_time).nanoseconds / 1.0e9
+        demo_duration_s = float(self.get_parameter('demo_duration_s').value)
+        if demo_duration_s > 0.0 and elapsed > demo_duration_s:
+            self.publisher.publish(Twist())
+            return
+
         base_speed = float(self.get_parameter('linear_speed_mps').value)
         angular_scale = float(self.get_parameter('angular_scale').value)
         phase = self.trajectory_id * math.pi / 3.0
