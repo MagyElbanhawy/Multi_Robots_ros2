@@ -20,11 +20,11 @@ from launch_ros.substitutions import FindPackageShare
 
 VALID_ROBOT_COUNTS = {0, 2, 3, 4, 5}
 LIMO_SPAWN_POSES = [
-    (-5.7, 1.65, 0.0),    # limo_1 near room 1
-    (5.7, 1.65, 3.14),    # limo_2 near room 2
-    (0.0, -0.75, 1.57),   # limo_3 near corridor
-    (5.6, -4.45, 3.14),   # limo_4 near meeting area
-    (-5.8, -4.55, 0.0),   # limo_5 near office/lab area
+    (-5.8, 0.0, 0.0),     # limo_1 west corridor, facing east
+    (-3.2, 0.0, 0.0),     # limo_2 west-center corridor, facing east
+    (0.0, 2.15, -1.57),   # limo_3 upper center, facing south
+    (3.2, 0.0, 3.14),     # limo_4 east-center corridor, facing west
+    (5.8, 0.0, 3.14),     # limo_5 east corridor, facing west
 ]
 
 
@@ -136,7 +136,8 @@ def _spawn_limo_robots(context, *args, **kwargs):
                 parameters=[{
                     'robot_id': robot_name,
                     'trajectory_id': index,
-                    'linear_speed_mps': 0.20,
+                    'linear_speed_mps': 0.34,
+                    'angular_scale': 0.55,
                 }],
                 output='screen',
             ),

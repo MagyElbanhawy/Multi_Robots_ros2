@@ -519,7 +519,7 @@
     </model>
     <model name="limo_1_spawn_marker">
       <static>true</static>
-      <pose>-5.7 1.65 0.015 0 0 0</pose>
+      <pose>-5.8 0.0 0.015 0 0 0</pose>
       <link name="link">
         <collision name="collision"><geometry><box><size>0.45 0.45 0.03</size></box></geometry></collision>
         <visual name="visual"><geometry><box><size>0.45 0.45 0.03</size></box></geometry><material><ambient>0.1 0.55 0.28 1</ambient><diffuse>0.1 0.55 0.28 1</diffuse></material></visual>
@@ -527,7 +527,7 @@
     </model>
     <model name="limo_2_spawn_marker">
       <static>true</static>
-      <pose>5.7 1.65 0.015 0 0 0</pose>
+      <pose>-3.2 0.0 0.015 0 0 0</pose>
       <link name="link">
         <collision name="collision"><geometry><box><size>0.45 0.45 0.03</size></box></geometry></collision>
         <visual name="visual"><geometry><box><size>0.45 0.45 0.03</size></box></geometry><material><ambient>0.1 0.2 0.8 1</ambient><diffuse>0.1 0.2 0.8 1</diffuse></material></visual>
@@ -535,7 +535,7 @@
     </model>
     <model name="limo_3_spawn_marker">
       <static>true</static>
-      <pose>0.0 -0.75 0.015 0 0 0</pose>
+      <pose>0.0 2.15 0.015 0 0 0</pose>
       <link name="link">
         <collision name="collision"><geometry><box><size>0.45 0.45 0.03</size></box></geometry></collision>
         <visual name="visual"><geometry><box><size>0.45 0.45 0.03</size></box></geometry><material><ambient>0.8 0.62 0.08 1</ambient><diffuse>0.8 0.62 0.08 1</diffuse></material></visual>
@@ -543,7 +543,7 @@
     </model>
     <model name="limo_4_spawn_marker">
       <static>true</static>
-      <pose>5.6 -4.45 0.015 0 0 0</pose>
+      <pose>3.2 0.0 0.015 0 0 0</pose>
       <link name="link">
         <collision name="collision"><geometry><box><size>0.45 0.45 0.03</size></box></geometry></collision>
         <visual name="visual"><geometry><box><size>0.45 0.45 0.03</size></box></geometry><material><ambient>0.7 0.1 0.08 1</ambient><diffuse>0.7 0.1 0.08 1</diffuse></material></visual>
@@ -551,7 +551,7 @@
     </model>
     <model name="limo_5_spawn_marker">
       <static>true</static>
-      <pose>-5.8 -4.55 0.015 0 0 0</pose>
+      <pose>5.8 0.0 0.015 0 0 0</pose>
       <link name="link">
         <collision name="collision"><geometry><box><size>0.45 0.45 0.03</size></box></geometry></collision>
         <visual name="visual"><geometry><box><size>0.45 0.45 0.03</size></box></geometry><material><ambient>0.7 0.2 0.8 1</ambient><diffuse>0.7 0.2 0.8 1</diffuse></material></visual>
