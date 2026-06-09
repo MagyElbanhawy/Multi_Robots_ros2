@@ -52,26 +52,26 @@
   </joint>
 
   <link name="front_left_wheel">
+    <inertial><mass value="0.6"/><origin xyz="0 0 0" rpy="0 0 0"/><inertia ixx="0.002" iyy="0.002" izz="0.002" ixy="0" ixz="0" iyz="0"/></inertial>
     <collision><origin xyz="0 0 0" rpy="1.5708 0 0"/><geometry><cylinder radius="0.105" length="0.045"/></geometry></collision>
     <visual><origin xyz="0 0 0" rpy="1.5708 0 0"/><geometry><cylinder radius="0.105" length="0.045"/></geometry><material name="wheel"><color rgba="0.02 0.02 0.02 1"/></material></visual>
   </link>
   <link name="front_right_wheel">
+    <inertial><mass value="0.6"/><origin xyz="0 0 0" rpy="0 0 0"/><inertia ixx="0.002" iyy="0.002" izz="0.002" ixy="0" ixz="0" iyz="0"/></inertial>
     <collision><origin xyz="0 0 0" rpy="1.5708 0 0"/><geometry><cylinder radius="0.105" length="0.045"/></geometry></collision>
     <visual><origin xyz="0 0 0" rpy="1.5708 0 0"/><geometry><cylinder radius="0.105" length="0.045"/></geometry><material name="wheel"/></visual>
   </link>
   <link name="rear_left_wheel">
-    <collision><origin xyz="0 0 0" rpy="1.5708 0 0"/><geometry><cylinder radius="0.105" length="0.045"/></geometry></collision>
-    <visual><origin xyz="0 0 0" rpy="1.5708 0 0"/><geometry><cylinder radius="0.105" length="0.045"/></geometry><material name="wheel"/></visual>
+    <visual><origin xyz="0 0 0" rpy="1.5708 0 0"/><geometry><cylinder radius="0.075" length="0.035"/></geometry><material name="wheel"/></visual>
   </link>
   <link name="rear_right_wheel">
-    <collision><origin xyz="0 0 0" rpy="1.5708 0 0"/><geometry><cylinder radius="0.105" length="0.045"/></geometry></collision>
-    <visual><origin xyz="0 0 0" rpy="1.5708 0 0"/><geometry><cylinder radius="0.105" length="0.045"/></geometry><material name="wheel"/></visual>
+    <visual><origin xyz="0 0 0" rpy="1.5708 0 0"/><geometry><cylinder radius="0.075" length="0.035"/></geometry><material name="wheel"/></visual>
   </link>
 
   <joint name="front_left_wheel_joint" type="continuous"><parent link="base_link"/><child link="front_left_wheel"/><origin xyz="0.22 0.235 -0.035" rpy="0 0 0"/><axis xyz="0 1 0"/></joint>
   <joint name="front_right_wheel_joint" type="continuous"><parent link="base_link"/><child link="front_right_wheel"/><origin xyz="0.22 -0.235 -0.035" rpy="0 0 0"/><axis xyz="0 1 0"/></joint>
-  <joint name="rear_left_wheel_joint" type="continuous"><parent link="base_link"/><child link="rear_left_wheel"/><origin xyz="-0.22 0.235 -0.035" rpy="0 0 0"/><axis xyz="0 1 0"/></joint>
-  <joint name="rear_right_wheel_joint" type="continuous"><parent link="base_link"/><child link="rear_right_wheel"/><origin xyz="-0.22 -0.235 -0.035" rpy="0 0 0"/><axis xyz="0 1 0"/></joint>
+  <joint name="rear_left_wheel_joint" type="fixed"><parent link="base_link"/><child link="rear_left_wheel"/><origin xyz="-0.22 0.235 -0.045" rpy="0 0 0"/></joint>
+  <joint name="rear_right_wheel_joint" type="fixed"><parent link="base_link"/><child link="rear_right_wheel"/><origin xyz="-0.22 -0.235 -0.045" rpy="0 0 0"/></joint>
 
   <gazebo reference="base_link"><material>Gazebo/Blue</material></gazebo>
   <gazebo reference="top_cover"><material>Gazebo/Black</material></gazebo>
@@ -89,9 +89,7 @@
         <remapping>/tf:=tf</remapping>
       </ros>
       <left_joint>front_left_wheel_joint</left_joint>
-      <left_joint>rear_left_wheel_joint</left_joint>
       <right_joint>front_right_wheel_joint</right_joint>
-      <right_joint>rear_right_wheel_joint</right_joint>
       <wheel_separation>0.47</wheel_separation>
       <wheel_diameter>0.21</wheel_diameter>
       <max_wheel_torque>20</max_wheel_torque>

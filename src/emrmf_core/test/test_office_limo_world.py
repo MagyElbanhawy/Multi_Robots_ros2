@@ -57,3 +57,7 @@ def test_limo_placeholder_exposes_required_gazebo_topics():
     assert '<remapping>odom:=odom</remapping>' in text
     assert '<remapping>~/out:=scan</remapping>' in text
     assert '<namespace>$(arg robot_namespace)</namespace>' in text
+    assert text.count('<left_joint>') == 1
+    assert text.count('<right_joint>') == 1
+    assert '<left_joint>front_left_wheel_joint</left_joint>' in text
+    assert '<right_joint>front_right_wheel_joint</right_joint>' in text
