@@ -3,7 +3,7 @@
   <name>emrmf_experiments</name>
   <version>0.1.0</version>
   <description>Active experiment orchestration, communication proxy, and reviewer-ready logging for EMRMF multi-robot SLAM.</description>
-  <maintainer email="research@example.com">EMRMF Research Team</maintainer>
+  <maintainer email="author@example.invalid">The Author</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_python</buildtool_depend>
