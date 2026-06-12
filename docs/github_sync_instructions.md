@@ -7,13 +7,13 @@ Use this checklist when `Test-Path src/emrmf_experiments` returns `False` on Win
 The expected repository folder used during the reviewer-release workflow was:
 
 ```powershell
-cd "C:\Users\AdminOS\OneDrive\Documents\ros2_phd\ros2 phd"
+cd "C:\path\to\repo\ros2 phd"
 ```
 
 Do not use the similarly named folder below unless it is also a proper clone:
 
 ```powershell
-C:\Users\AdminOS\OneDrive\Documents\ros2 phd
+C:\path\to\repo\ros2 phd
 ```
 
 Check that the GitHub remote exists:
@@ -25,8 +25,8 @@ git remote -v
 The output should include:
 
 ```text
-origin  https://github.com/MagyElbanhawy/Multi_Robots_ros2.git (fetch)
-origin  https://github.com/MagyElbanhawy/Multi_Robots_ros2.git (push)
+origin  https://github.com/<repository>/Multi_Robots_ros2.git (fetch)
+origin  https://github.com/<repository>/Multi_Robots_ros2.git (push)
 ```
 
 ## 2. Update main from GitHub
@@ -49,16 +49,16 @@ If this prints `False`, GitHub `main` does not yet contain the latest `emrmf_exp
 The validation package must be pushed as a branch and merged into `main` through a pull request:
 
 ```powershell
-git checkout -b codex/add-emrmf-experiments-validation
+git checkout -b reviewer/add-emrmf-experiments-validation
 git add src/emrmf_experiments scripts/generate_emrmf_experiment_validation.py README.md .github/workflows/ci.yml
 git commit -m "Add EMRMF experiment validation package"
-git push -u origin codex/add-emrmf-experiments-validation
+git push -u origin reviewer/add-emrmf-experiments-validation
 ```
 
 Open a GitHub pull request from:
 
 ```text
-codex/add-emrmf-experiments-validation
+reviewer/add-emrmf-experiments-validation
 ```
 
 into:
