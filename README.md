@@ -1,7 +1,5 @@
 # EMRMF ROS 2 Multi-Robot SLAM Reference Environment
 
-[![CI](https://github.com/MagyElbanhawy/Multi_Robots_ros2/actions/workflows/ci.yml/badge.svg)](https://github.com/MagyElbanhawy/Multi_Robots_ros2/actions/workflows/ci.yml)
-
 This repository provides a runnable ROS 2 Humble environment for the **Enhanced Multi-Robot Map Fusion (EMRMF)** architecture described in the PhD paper revision.  It is designed to support reviewer-requested experiments around trust-factor ablations, LoRa latency/packet-loss sensitivity, hybrid-vs-decentralized fault tolerance, adversarial robot handling, and ROS 2 DDS/QoS implementation details.
 
 ## What is included

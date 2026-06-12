@@ -3,7 +3,7 @@
   <name>emrmf_core</name>
   <version>0.1.0</version>
   <description>ROS 2 reference implementation of EMRMF multi-robot trust-aware map fusion experiments.</description>
-  <maintainer email="research@example.com">EMRMF Research Team</maintainer>
+  <maintainer email="author@example.invalid">The Author</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_python</buildtool_depend>
