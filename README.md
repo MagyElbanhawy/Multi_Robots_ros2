@@ -2,6 +2,13 @@
 
 This repository provides a runnable ROS 2 Humble environment for the **Enhanced Multi-Robot Map Fusion (EMRMF)** architecture described in the PhD paper revision.  It is designed to support reviewer-requested experiments around trust-factor ablations, LoRa latency/packet-loss sensitivity, hybrid-vs-decentralized fault tolerance, adversarial robot handling, and ROS 2 DDS/QoS implementation details.
 
+## Publication
+
+The paper associated with this repository was published by **Springer Nature** in the **Q1 Journal of King Saud University Computer and Information Sciences**, a journal with a high impact factor, on **17 August 2026**.
+
+- **Article:** [Journal of King Saud University Computer and Information Sciences](https://link.springer.com/article/10.1007/s44443-026-01079-6)
+- **DOI:** [10.1007/s44443-026-01079-6](https://www.doi.org/10.1007/s44443-026-01079-6)
+
 ## What is included
 
 | Component | ROS 2 executable | Purpose |
